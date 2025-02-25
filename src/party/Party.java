@@ -3,6 +3,7 @@ package party;
 import charsys.RPGCharacter;
 import pos.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Party {
@@ -96,4 +97,14 @@ public class Party {
         }
     }
 
+    public List<RPGCharacter> getPartyMembers() {
+        List<RPGCharacter> participants = new ArrayList<>();
+        for(RPGCharacter[] row: partyGrid) {
+            for(RPGCharacter participant: row) {
+                participants.add(participant);
+            }
+        }
+
+        return participants;
+    }
 }

@@ -1,6 +1,8 @@
 package charsys;
 
 import charsys.actions.Actionable;
+import charsys.attrib.Attribute;
+import charsys.attrib.CharacterStats;
 import charsys.role.CharacterRole;
 import charsys.role.CharacterType;
 import pos.Position;
@@ -35,6 +37,10 @@ public abstract class RPGCharacter {
      * The third index is the last fallback position for this character.
      */
     protected List<Integer> preferredColumns;
+    /**
+     * Character stats of this character.
+     */
+    protected CharacterStats stats = new CharacterStats();
 
     public RPGCharacter(String name, CharacterType type, CharacterRole primaryRole, List<Integer> preferredColumns) {
         this(name, type, primaryRole, null, preferredColumns);
@@ -168,5 +174,13 @@ public abstract class RPGCharacter {
 
     public List<Integer> getPreferredColumns() {
         return this.preferredColumns;
+    }
+
+    public CharacterStats getStats() {
+        return stats;
+    }
+
+    public int getCharacterStat(Attribute attribute) {
+        return this.stats.getAttribute(attribute);
     }
 }
