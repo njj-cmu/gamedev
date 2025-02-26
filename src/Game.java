@@ -1,15 +1,18 @@
 import charsys.*;
+import charsys.actions.Actionable;
 import charsys.attrib.Attribute;
 import charsys.role.CharacterRole;
 import party.Party;
-import turnsys.TurnEntry;
+import pos.Position;
 import turnsys.TurnManager;
 
+import java.util.Scanner;
+
 public class Game {
+
+    private final static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-
-        // TODO: Try to change your party formation and see what works
-
         Party playerParty = new Party();
 
         RPGCharacter hero1 = new Warrior("Leon", CharacterRole.TANK);
@@ -47,31 +50,41 @@ public class Game {
         System.out.println("Enemy PARTY");
         enemyParty.displayParty();
 
-
-        // Creating a TurnManager
-
-        TurnManager turnManager = new TurnManager();
-        turnManager.addParticipants(playerParty.getPartyMembers());
-        turnManager.addParticipants(enemyParty.getPartyMembers());
-
-        // Show Lineup of the Queue
-        System.out.println("Turn Lineup!");
-        turnManager.showQueue();
-
-        // Create a breakpoint here and run the entire program using DEBUG.
-        while(turnManager.hasTurnLeft()) {
-            // Get next character
-            RPGCharacter character = turnManager.getNextTurn();
-
-            if(character == null) break; // Safety check in case no Character is present
-
-            System.out.printf("%s's turn!\n", character.getName());
-
-            // For now, let's say each character will perform their default actions
-            character.performChosenAction();
-
-            // End character's turn
-            turnManager.endTurn();
-        }
+//
+//        // Create a breakpoint here and run the entire program using DEBUG.
+//        while(turnManager.hasTurnLeft())
+//        {
+//            // Get next character
+//            RPGCharacter character = turnManager.getNextTurn();
+//
+//            if(character == null) break; // Safety check in case no Character is present
+//
+//            System.out.printf("%s's turn!\n", character.getName());
+//
+//            // Choose action first
+//            System.out.printf("CHOOSE AN ACTION FOR %s\n", character.getName());
+//            character.displayCharacterActions();
+//
+//            System.out.print("Action index: ");
+//            int index = scanner.nextInt();
+//
+//            Actionable action = character.chooseAction(index);
+//
+//            // Choose target
+//            System.out.println("Choose a target from the enemy!");
+//            enemyParty.displayParty();
+//            System.out.print("Index [1-9]: ");
+//            int targetIndex = scanner.nextInt();
+//            Position position = Party.getPositionBasedOnIndex(targetIndex);
+//
+//            // If given position is valid between 1 and 9
+//            if(position != null) {
+//                RPGCharacter target = enemyParty.getCharacterAtPos(position);
+//                action.performAction(target);
+//            }
+//
+//            // End character's turn
+//            turnManager.endTurn();
+//        }
     }
 }

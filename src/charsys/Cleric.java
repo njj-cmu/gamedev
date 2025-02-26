@@ -1,7 +1,7 @@
 package charsys;
 
 import charsys.actions.BuffAction;
-import charsys.actions.DebuffAction;
+import charsys.actions.Weaken;
 import charsys.role.CharacterRole;
 import charsys.role.CharacterType;
 
@@ -28,6 +28,6 @@ public class Cleric extends RPGCharacter {
         // By adding BuffAction() first, we are declaring that clerics perform buffs by default
         addAction(new BuffAction());
         // To let clerics perform the debuff action, we can implement some sort of AI system for this one.
-        addAction(new DebuffAction());
+        addAction(new Weaken());
     }
 }

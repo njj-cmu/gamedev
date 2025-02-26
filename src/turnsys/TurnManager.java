@@ -1,13 +1,19 @@
 package turnsys;
 
 import charsys.RPGCharacter;
+import charsys.actions.Actionable;
 import charsys.attrib.Attribute;
+import inputsys.PlayerInput;
+import party.Party;
 
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+
+
 public class TurnManager {
+
 
     /**
      * Stores the queue of TurnEntry objects, where each TurnEntry object handles a particular character and monitors
@@ -17,28 +23,37 @@ public class TurnManager {
      * For turn order index, see {@link TurnEntry} for more info.
      */
     private final Queue<TurnEntry> turnQueue = new PriorityQueue<>(new TurnComparator());
+    /**
+     * First party.
+     */
+    private final Party a;
+    /**
+     * Second party.
+     */
+    private final Party b;
 
     /**
-     * Creates a TurnManager object that handles the turn system during a formation battle of two different parties:
-     * Player Party, and an Enemy Party.
+     * Creates a TurnManager object that handles the turn between 2 different parties.
+     * @param a First party.
+     * @param b Second party.
      */
-    public TurnManager() {}
-
-    /**
-     * Creates a TurnManager object with additional participant parameters.
-     * @param participants List of RPGCharacter participants.
-     */
-    public TurnManager(List<RPGCharacter> participants) {
-        this.addParticipants(participants);
+    public TurnManager(Party a, Party b) {
+        this.a = a;
+        this.b = b;
+        addParticipants();
     }
 
     /**
-     * Adds a list of RPGCharacter participants that will participate
-     * in the battle.
-     * @param participants RPGCharacters to add.
+     * Adds the list of participants from each party into the queue.
      */
-    public void addParticipants(List<RPGCharacter> participants) {
-        for(RPGCharacter character: participants) {
+    private void addParticipants() {
+        // Add members from A
+        for(RPGCharacter character: a.getPartyMembers()) {
+            turnQueue.add(new TurnEntry(character, 0));
+        }
+
+        // Add members from B
+        for(RPGCharacter character: b.getPartyMembers()) {
             turnQueue.add(new TurnEntry(character, 0));
         }
     }
@@ -47,7 +62,7 @@ public class TurnManager {
      * Gets the character object who wants to execute their next turn.
      * @return RPGCharacter object that will execute the next turn.
      */
-    public RPGCharacter getNextTurn() {
+    private RPGCharacter getNextTurn() {
         TurnEntry temp = turnQueue.peek(); // Get next character
         return (temp != null) ? temp.getCharacter() : null;
     }
@@ -55,7 +70,7 @@ public class TurnManager {
     /**
      * Ends the current turn of the latest RPGCharacter.
      */
-    public void endTurn() {
+    private void endTurn() {
 
         // TODO: Factor status effects later (buffs, debuffs, stuns, etc.)
         // Remove the topmost TurnEntry object
@@ -71,7 +86,7 @@ public class TurnManager {
      * Checks if a turn is still available next.
      * @return True if a turn is available. False otherwise.
      */
-    public boolean hasTurnLeft() {
+    private boolean hasTurnLeft() {
         return !turnQueue.isEmpty();
     }
 
@@ -88,9 +103,30 @@ public class TurnManager {
     /**
      * Debugging purposes. Shows the queue of RPGCharacters in the Turn System.
      */
-    public void showQueue() {
+    private void showQueue() {
         for(TurnEntry entry: turnQueue) {
             System.out.println(entry.getCharacter().getName() + " - SPEED: " + entry.getCharacter().getCharacterStat(Attribute.SPEED));
         }
+    }
+
+    public void runTurnCycle() {
+        while(this.hasTurnLeft()) {
+            RPGCharacter character = this.getNextTurn();
+
+            if(character == null) break; // Safety check
+
+            Actionable chosenAction = selectAction(character);
+        }
+    }
+
+    /**
+     * Initiate a prompt for the RPGCharacter to choose their turn's action.
+     * @param character RPGCharacter object that wants to execute their action this turn.
+     */
+    private Actionable selectAction(RPGCharacter character) {
+        // Display available actions
+        // We can tweak this further later.
+        character.displayCharacterActions();
+        return PlayerInput.selectPlayerAction(character.getActions());
     }
 }

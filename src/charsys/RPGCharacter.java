@@ -65,7 +65,7 @@ public abstract class RPGCharacter {
 
     /**
      * Get the name of this character.
-     * @return
+     * @return Character name.
      */
     public String getName() {
         return this.name;
@@ -82,6 +82,10 @@ public abstract class RPGCharacter {
     public void levelUp() {
         this.level++;
         System.out.printf("%s (%d) has leveled up!", this.name, this.level);
+    }
+
+    public List<Actionable> getActions() {
+        return this.actions;
     }
 
     /**
@@ -109,41 +113,7 @@ public abstract class RPGCharacter {
     }
 
     /**
-     * A convenient way to perform this character's default action.
-     */
-    public void performChosenAction() {
-        this.performChosenAction(null);
-    }
-
-    /**
-     * Performs selected action. If none is provided, set index to 0.
-     * @param index Action to be executed. Leave none if character should perform default action.
-     */
-    public void performChosenAction(Integer index) {
-        if(this.actions.isEmpty()) {
-            System.out.printf("%s has no possible actions!\n", this.name);
-            return;
-        }
-
-        Actionable chosenAction;
-
-        if(index == null) {
-            chosenAction = chooseAction(0);
-        }
-        else if(index < 0 || index >= actions.size()) {
-            System.err.printf("%s tried an invalid action!\n", this.name);
-            return;
-        }
-        else {
-            chosenAction = actions.get(index);
-        }
-
-        System.out.printf("%s decides to... ", this.name);
-        chosenAction.performAction();
-    }
-
-    /**
-     * Presents this character's current row and column position in a party formation.
+     * Presents this character's current row and column position in party formations.
      * @return Row and column at party formation.
      */
     public String getPosition() {
@@ -187,5 +157,12 @@ public abstract class RPGCharacter {
 
     public void setCharacterStat(Attribute attribute, Integer value) {
         this.stats.setAttributes(attribute, value);
+    }
+
+    public void displayCharacterActions() {
+        int i = 1;
+        for(Actionable action: this.actions) {
+            System.out.printf("[%d] %s\n", i, action.getActionName());
+        }
     }
 }

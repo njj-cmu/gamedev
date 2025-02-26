@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Party {
-    private static final int MAX_ROWS = 3, MAX_COLS = 3;
+    public static final int MAX_ROWS = 3, MAX_COLS = 3;
     private final RPGCharacter[][] partyGrid;
 
     public Party() {
@@ -107,5 +107,36 @@ public class Party {
             }
         }
         return participants;
+    }
+
+    /**
+     * Gets the Position of the selected index from the party formation.
+     * @param index Index.
+     * @return Position object containing the row and column of the selected index.
+     */
+    public static Position getPositionBasedOnIndex(int index) {
+        switch(index) {
+            case 1:
+                return new Position(0,0);
+            case 2:
+                return new Position(0,1);
+            case 3:
+                return new Position(0,2);
+            case 4:
+                return new Position(1,0);
+            case 5:
+                return new Position(1,1);
+            case 6:
+                return new Position(1,2);
+            case 7:
+                return new Position(2,0);
+            case 8:
+                return new Position(2,1);
+            case 9:
+                return new Position(2,2);
+            default:
+                // Invalid position
+                return null;
+        }
     }
 }
