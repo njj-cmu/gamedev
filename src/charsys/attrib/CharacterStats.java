@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CharacterStats {
-    private Map<Attribute, Integer> attributes;
+    private final Map<Attribute, Integer> attributes;
 
     public CharacterStats() {
         this.attributes = new HashMap<>();

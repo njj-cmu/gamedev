@@ -1,6 +1,7 @@
 package turnsys;
 
 import charsys.RPGCharacter;
+import charsys.attrib.Attribute;
 
 import java.util.List;
 import java.util.PriorityQueue;
@@ -12,11 +13,23 @@ public class TurnManager {
     // End a character's turn
     // Checks if Turn Queue is empty or not
 
-    private Queue<RPGCharacter> turnQueue;
+    private final Queue<TurnEntry> turnQueue = new PriorityQueue<>(new TurnComparator());
+    /**
+     * Ensures that each character can execute exactly only one action per turn!
+     */
+    private static final int TURN_CYCLE_INCREMENT = 1;
+
+    public TurnManager() {}
 
     public TurnManager(List<RPGCharacter> participants) {
-        this.turnQueue = new PriorityQueue<RPGCharacter>(new TurnComparator());
-        this.turnQueue.addAll(participants);
+        this.addParticipants(participants);
+    }
+
+    public void addParticipants(List<RPGCharacter> participants) {
+//        this.turnQueue.addAll(participants);
+        for(RPGCharacter character: participants) {
+            turnQueue.add(new TurnEntry(character, 0));
+        }
     }
 
     /**
@@ -24,19 +37,25 @@ public class TurnManager {
      * @return RPGCharacter object that will execute the next turn.
      */
     public RPGCharacter getNextTurn() {
-        return turnQueue.poll();
+        TurnEntry temp = turnQueue.peek(); // Get next character
+        return (temp != null) ? temp.getCharacter() : null;
     }
 
     /**
      * Ends the current turn of the latest RPGCharacter.
      */
     public void endTurn(RPGCharacter character) {
+        TurnEntry entry = findTurnEntry(character);
         // Modify turn later.
         /*
             We add a character to the end of the queue after they executed the action.
             Status effects will be added later to adjust turn order.
          */
-        turnQueue.add(character);
+        if(entry != null) {
+            turnQueue.remove();
+            entry.addTurnPriority(10 / character.getCharacterStat(Attribute.SPEED));
+            turnQueue.offer(entry);
+        }
     }
 
     /**
@@ -45,5 +64,20 @@ public class TurnManager {
      */
     public boolean hasTurnLeft() {
         return !turnQueue.isEmpty();
+    }
+
+    public TurnEntry findTurnEntry(RPGCharacter character) {
+        for(TurnEntry entry: this.turnQueue) {
+            if(entry.getCharacter() == character) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    public void showQueue() {
+        for(TurnEntry entry: turnQueue) {
+            System.out.println(entry.getCharacter().getName() + " - SPEED: " + entry.getCharacter().getCharacterStat(Attribute.SPEED));
+        }
     }
 }

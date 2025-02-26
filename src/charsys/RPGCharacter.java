@@ -60,6 +60,7 @@ public abstract class RPGCharacter {
         this.type = type;
         this.primaryRole = primaryRole;
         this.secondaryRole = secondaryRole;
+        this.preferredColumns = preferredColumns;
     }
 
     /**
@@ -182,5 +183,9 @@ public abstract class RPGCharacter {
 
     public int getCharacterStat(Attribute attribute) {
         return this.stats.getAttribute(attribute);
+    }
+
+    public void setCharacterStat(Attribute attribute, Integer value) {
+        this.stats.setAttributes(attribute, value);
     }
 }

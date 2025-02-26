@@ -1,8 +1,6 @@
 package turnsys;
 
-import charsys.RPGCharacter;
 import charsys.attrib.Attribute;
-import charsys.attrib.CharacterStats;
 
 import java.util.Comparator;
 
@@ -10,18 +8,15 @@ import java.util.Comparator;
  * A comparator class that compares if one character should go first
  * based on their SPEED attribute.
  */
-public class TurnComparator implements Comparator<RPGCharacter> {
+public class TurnComparator implements Comparator<TurnEntry> {
 
     @Override
-    public int compare(RPGCharacter o1, RPGCharacter o2) {
-        if(o1.getCharacterStat(Attribute.SPEED) <
-                o2.getCharacterStat(Attribute.SPEED)) {
-            return -1;
+    public int compare(TurnEntry o1, TurnEntry o2) {
+        if(o1.getRoundOrder() != o2.getRoundOrder()) {
+            return Integer.compare(o1.getRoundOrder(), o2.getRoundOrder());
         }
-        else if(o1.getCharacterStat(Attribute.SPEED) ==
-                o2.getCharacterStat(Attribute.SPEED)) {
-            return 0;
-        }
-        return 1;
+
+        return Integer.compare(o2.getCharacter().getCharacterStat(Attribute.SPEED),
+                o1.getCharacter().getCharacterStat(Attribute.SPEED));
     }
 }

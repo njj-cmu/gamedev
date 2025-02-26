@@ -4,6 +4,7 @@ import charsys.RPGCharacter;
 import pos.Position;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Party {
@@ -100,11 +101,11 @@ public class Party {
     public List<RPGCharacter> getPartyMembers() {
         List<RPGCharacter> participants = new ArrayList<>();
         for(RPGCharacter[] row: partyGrid) {
-            for(RPGCharacter participant: row) {
-                participants.add(participant);
+            for(RPGCharacter character: row) {
+                if(character != null) // Safety check
+                    participants.add(character);
             }
         }
-
         return participants;
     }
 }
