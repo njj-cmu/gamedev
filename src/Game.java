@@ -8,6 +8,8 @@ import turnsys.TurnManager;
 public class Game {
     public static void main(String[] args) {
 
+        // TODO: Try to change your party formation and see what works
+
         Party playerParty = new Party();
 
         RPGCharacter hero1 = new Warrior("Leon", CharacterRole.TANK);
@@ -24,6 +26,9 @@ public class Game {
 
         System.out.println("Player PARTY");
         playerParty.displayParty();
+
+        // Enemy party composition
+        // TODO: Try to play around the characters
 
         Party enemyParty = new Party();
 
@@ -42,19 +47,23 @@ public class Game {
         System.out.println("Enemy PARTY");
         enemyParty.displayParty();
 
+
+        // Creating a TurnManager
+
         TurnManager turnManager = new TurnManager();
         turnManager.addParticipants(playerParty.getPartyMembers());
         turnManager.addParticipants(enemyParty.getPartyMembers());
 
-
+        // Show Lineup of the Queue
         System.out.println("Turn Lineup!");
         turnManager.showQueue();
 
+        // Create a breakpoint here and run the entire program using DEBUG.
         while(turnManager.hasTurnLeft()) {
             // Get next character
             RPGCharacter character = turnManager.getNextTurn();
 
-            if(character == null) break; // Safety check
+            if(character == null) break; // Safety check in case no Character is present
 
             System.out.printf("%s's turn!\n", character.getName());
 
@@ -62,7 +71,7 @@ public class Game {
             character.performChosenAction();
 
             // End character's turn
-            turnManager.endTurn(character);
+            turnManager.endTurn();
         }
     }
 }

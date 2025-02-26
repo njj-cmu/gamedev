@@ -9,24 +9,35 @@ import java.util.Queue;
 
 public class TurnManager {
 
-    // Get the turn of a character
-    // End a character's turn
-    // Checks if Turn Queue is empty or not
-
-    private final Queue<TurnEntry> turnQueue = new PriorityQueue<>(new TurnComparator());
     /**
-     * Ensures that each character can execute exactly only one action per turn!
+     * Stores the queue of TurnEntry objects, where each TurnEntry object handles a particular character and monitors
+     * their current turn order index. Positioning of characters in the queues is based on their SPEED attribute,
+     * and their turn order index from the TurnEntry object.
+     * <br><br>
+     * For turn order index, see {@link TurnEntry} for more info.
      */
-    private static final int TURN_CYCLE_INCREMENT = 1;
+    private final Queue<TurnEntry> turnQueue = new PriorityQueue<>(new TurnComparator());
 
+    /**
+     * Creates a TurnManager object that handles the turn system during a formation battle of two different parties:
+     * Player Party, and an Enemy Party.
+     */
     public TurnManager() {}
 
+    /**
+     * Creates a TurnManager object with additional participant parameters.
+     * @param participants List of RPGCharacter participants.
+     */
     public TurnManager(List<RPGCharacter> participants) {
         this.addParticipants(participants);
     }
 
+    /**
+     * Adds a list of RPGCharacter participants that will participate
+     * in the battle.
+     * @param participants RPGCharacters to add.
+     */
     public void addParticipants(List<RPGCharacter> participants) {
-//        this.turnQueue.addAll(participants);
         for(RPGCharacter character: participants) {
             turnQueue.add(new TurnEntry(character, 0));
         }
@@ -44,18 +55,16 @@ public class TurnManager {
     /**
      * Ends the current turn of the latest RPGCharacter.
      */
-    public void endTurn(RPGCharacter character) {
-        TurnEntry entry = findTurnEntry(character);
-        // Modify turn later.
-        /*
-            We add a character to the end of the queue after they executed the action.
-            Status effects will be added later to adjust turn order.
-         */
-        if(entry != null) {
-            turnQueue.remove();
-            entry.addTurnPriority(10 / character.getCharacterStat(Attribute.SPEED));
-            turnQueue.offer(entry);
-        }
+    public void endTurn() {
+
+        // TODO: Factor status effects later (buffs, debuffs, stuns, etc.)
+        // Remove the topmost TurnEntry object
+        TurnEntry entry = turnQueue.remove();
+        // Increase the character's round order index.
+        entry.increaseRoundOrder();
+
+        // Put back in the queue with an increased round order index.
+        turnQueue.offer(entry);
     }
 
     /**
@@ -66,7 +75,8 @@ public class TurnManager {
         return !turnQueue.isEmpty();
     }
 
-    public TurnEntry findTurnEntry(RPGCharacter character) {
+
+    private TurnEntry findTurnEntry(RPGCharacter character) {
         for(TurnEntry entry: this.turnQueue) {
             if(entry.getCharacter() == character) {
                 return entry;
@@ -75,6 +85,9 @@ public class TurnManager {
         return null;
     }
 
+    /**
+     * Debugging purposes. Shows the queue of RPGCharacters in the Turn System.
+     */
     public void showQueue() {
         for(TurnEntry entry: turnQueue) {
             System.out.println(entry.getCharacter().getName() + " - SPEED: " + entry.getCharacter().getCharacterStat(Attribute.SPEED));

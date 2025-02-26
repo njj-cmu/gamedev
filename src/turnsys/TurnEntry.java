@@ -2,6 +2,10 @@ package turnsys;
 
 import charsys.RPGCharacter;
 
+/**
+ * Monitors the round order of a character. Basically, it checks whether a particular character can execute
+ * an act for the current round order in the Turn System.
+ */
 public class TurnEntry {
 
     private final RPGCharacter character;
