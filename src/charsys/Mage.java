@@ -1,6 +1,6 @@
 package charsys;
 
-import charsys.actions.SpellCast;
+import charsys.actions.Fireball;
 import charsys.role.CharacterRole;
 import charsys.role.CharacterType;
 
@@ -22,7 +22,7 @@ public class Mage extends RPGCharacter {
     }
 
     @Override
-    public void assignDefaultActions() {
-        this.addAction(new SpellCast());
+    protected void assignDefaultActions() {
+        this.addAction(new Fireball());
     }
 }

@@ -1,6 +1,7 @@
 package party;
 
 import charsys.RPGCharacter;
+import helper.ColumnReverser;
 import pos.Position;
 
 import java.util.ArrayList;
@@ -9,10 +10,22 @@ import java.util.List;
 
 public class Party {
     public static final int MAX_ROWS = 3, MAX_COLS = 3;
+    private final boolean reversed;
     private final RPGCharacter[][] partyGrid;
 
     public Party() {
+        this(false);
+    }
+
+    /**
+     * Creates a party object that contains RPGCharacter objects.
+     * @param reversed Flag if the positioning of characters must be reversed or not.
+     *                 <br>
+     *                 Set to true if the party to be created is for an enemy.
+     */
+    public Party(boolean reversed) {
         this.partyGrid = new RPGCharacter[MAX_ROWS][MAX_COLS];
+        this.reversed = reversed;
     }
 
     public RPGCharacter getCharacterAtPos(int row, int col) {
@@ -70,7 +83,15 @@ public class Party {
      * @return Position object if a position is available. Null otherwise.
      */
     private Position findFirstAvailablePosition(List<Integer> columns) {
-        for(int col: columns) {
+        /*
+             Copy RPGCharacter's columns.
+             Check first if the party grid should utilize a reversed way of positioning.
+             If it is reversed, then reverse the character's column preferences.
+         */
+        List<Integer> cols = new ArrayList<>(this.reversed ? ColumnReverser.reverseCharacterColumns(columns)
+            : columns);
+
+        for(int col: cols) {
             for(int row = 0; row < MAX_ROWS; row++) {
                 if(isEmpty(row, col)) {
                     return new Position(row, col);
@@ -98,6 +119,11 @@ public class Party {
         }
     }
 
+
+    /**
+     * Get the party members included in this Party object.
+     * @return Collection of party members inside a list.
+     */
     public List<RPGCharacter> getPartyMembers() {
         List<RPGCharacter> participants = new ArrayList<>();
         for(RPGCharacter[] row: partyGrid) {
@@ -112,31 +138,44 @@ public class Party {
     /**
      * Gets the Position of the selected index from the party formation.
      * @param index Index.
+     * @param reversed Flag if the retrieval of index is reversed.
+     *                 <br>
+     *                 Used if the position to be retrieved is from the player party. Only to be utilized for
+     *                 AI-based targeting.
      * @return Position object containing the row and column of the selected index.
      */
-    public static Position getPositionBasedOnIndex(int index) {
-        switch(index) {
+    public static Position getPositionBasedOnIndex(int index, boolean reversed) {
+        int row, col;
+
+        /*
+            Row assignment cycles on 0, 1, and 2.
+         */
+        row = index % 3;
+
+        switch (index) {
             case 1:
-                return new Position(0,0);
             case 2:
-                return new Position(0,1);
             case 3:
-                return new Position(0,2);
+                col = 0;
+                break;
             case 4:
-                return new Position(1,0);
             case 5:
-                return new Position(1,1);
             case 6:
-                return new Position(1,2);
+                col = 1;
+                break;
             case 7:
-                return new Position(2,0);
             case 8:
-                return new Position(2,1);
             case 9:
-                return new Position(2,2);
+                col = 2;
+                break;
             default:
-                // Invalid position
+                // Invalid indexing
                 return null;
         }
+        if(reversed) {
+            col = 2 - col;
+        }
+
+        return new Position(row, col);
     }
 }

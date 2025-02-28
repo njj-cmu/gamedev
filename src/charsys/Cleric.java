@@ -1,6 +1,6 @@
 package charsys;
 
-import charsys.actions.BuffAction;
+import charsys.actions.Defend;
 import charsys.actions.Weaken;
 import charsys.role.CharacterRole;
 import charsys.role.CharacterType;
@@ -23,10 +23,17 @@ public class Cleric extends RPGCharacter {
         this.assignDefaultActions();
     }
 
+    /**
+     * Assigns default actions to this Cleric: Defend and Weaken.
+     * <br>
+     * See {@link Defend} for Defend action.
+     * <br>
+     * See {@link Weaken} for Weaken action.
+     */
     @Override
     public void assignDefaultActions() {
         // By adding BuffAction() first, we are declaring that clerics perform buffs by default
-        addAction(new BuffAction());
+        addAction(new Defend());
         // To let clerics perform the debuff action, we can implement some sort of AI system for this one.
         addAction(new Weaken());
     }

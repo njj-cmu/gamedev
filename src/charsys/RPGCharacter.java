@@ -91,7 +91,7 @@ public abstract class RPGCharacter {
     /**
      * Assign default actions to this character!
      */
-    public abstract void assignDefaultActions();
+    protected abstract void assignDefaultActions();
 
     /**
      * Adds a new action for this character.

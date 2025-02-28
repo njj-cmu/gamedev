@@ -49,42 +49,5 @@ public class Game {
 
         System.out.println("Enemy PARTY");
         enemyParty.displayParty();
-
-//
-//        // Create a breakpoint here and run the entire program using DEBUG.
-//        while(turnManager.hasTurnLeft())
-//        {
-//            // Get next character
-//            RPGCharacter character = turnManager.getNextTurn();
-//
-//            if(character == null) break; // Safety check in case no Character is present
-//
-//            System.out.printf("%s's turn!\n", character.getName());
-//
-//            // Choose action first
-//            System.out.printf("CHOOSE AN ACTION FOR %s\n", character.getName());
-//            character.displayCharacterActions();
-//
-//            System.out.print("Action index: ");
-//            int index = scanner.nextInt();
-//
-//            Actionable action = character.chooseAction(index);
-//
-//            // Choose target
-//            System.out.println("Choose a target from the enemy!");
-//            enemyParty.displayParty();
-//            System.out.print("Index [1-9]: ");
-//            int targetIndex = scanner.nextInt();
-//            Position position = Party.getPositionBasedOnIndex(targetIndex);
-//
-//            // If given position is valid between 1 and 9
-//            if(position != null) {
-//                RPGCharacter target = enemyParty.getCharacterAtPos(position);
-//                action.performAction(target);
-//            }
-//
-//            // End character's turn
-//            turnManager.endTurn();
-//        }
     }
 }
