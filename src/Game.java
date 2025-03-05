@@ -1,15 +1,18 @@
 import charsys.*;
+import charsys.actions.Actionable;
 import charsys.attrib.Attribute;
 import charsys.role.CharacterRole;
 import party.Party;
-import turnsys.TurnEntry;
+import pos.Position;
 import turnsys.TurnManager;
 
+import java.util.Scanner;
+
 public class Game {
+
+    private final static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-
-        // TODO: Try to change your party formation and see what works
-
         Party playerParty = new Party();
 
         RPGCharacter hero1 = new Warrior("Leon", CharacterRole.TANK);
@@ -30,7 +33,7 @@ public class Game {
         // Enemy party composition
         // TODO: Try to play around the characters
 
-        Party enemyParty = new Party();
+        Party enemyParty = new Party(true);1
 
         RPGCharacter enemy1 = new Warrior("Johnson", CharacterRole.TANK);
         RPGCharacter enemy2 = new Archer("Miya");
@@ -47,31 +50,9 @@ public class Game {
         System.out.println("Enemy PARTY");
         enemyParty.displayParty();
 
-
-        // Creating a TurnManager
-
-        TurnManager turnManager = new TurnManager();
-        turnManager.addParticipants(playerParty.getPartyMembers());
-        turnManager.addParticipants(enemyParty.getPartyMembers());
-
-        // Show Lineup of the Queue
-        System.out.println("Turn Lineup!");
-        turnManager.showQueue();
-
-        // Create a breakpoint here and run the entire program using DEBUG.
-        while(turnManager.hasTurnLeft()) {
-            // Get next character
-            RPGCharacter character = turnManager.getNextTurn();
-
-            if(character == null) break; // Safety check in case no Character is present
-
-            System.out.printf("%s's turn!\n", character.getName());
-
-            // For now, let's say each character will perform their default actions
-            character.performChosenAction();
-
-            // End character's turn
-            turnManager.endTurn();
-        }
+        // Create a Turn Manager object
+        TurnManager turnManager = new TurnManager(playerParty, enemyParty);
+        // Run
+        turnManager.runTurnCycle();
     }
 }

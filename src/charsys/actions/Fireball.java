@@ -3,27 +3,27 @@ package charsys.actions;
 import charsys.RPGCharacter;
 
 /**
- * A buffing action that increases the defense of a selected RPGCharacter.
+ * A spell-casting action where an RPGCharacter casts a fireball.
  */
-public class Defend implements Actionable {
+public class Fireball implements Actionable {
 
     @Override
     public TargetType getTargetType() {
-        return TargetType.SELF;
+        return TargetType.SINGLE;
     }
 
     @Override
     public TargetParty getTargetPartySelector() {
-        return TargetParty.SELF;
+        return TargetParty.OPPOSITE;
     }
 
     @Override
     public void performAction(RPGCharacter source, RPGCharacter target) {
-        System.out.printf("%s chooses to defend against the next attack, increasing their defense!\n\n", source.getName());
+        System.out.printf("%s throws a fireball at %s!\n\n", source.getName(), target.getName());
     }
 
     @Override
     public String getActionName() {
-        return "Defend";
+        return "Fireball";
     }
 }
