@@ -1,5 +1,8 @@
 package pos;
 
+import charsys.RPGCharacter;
+import party.Party;
+
 public class Position {
     private int row, col;
 

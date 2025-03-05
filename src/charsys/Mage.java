@@ -1,6 +1,6 @@
 package charsys;
 
-import charsys.actions.SpellCast;
+import charsys.actions.Fireball;
 import charsys.role.CharacterRole;
 import charsys.role.CharacterType;
 
@@ -13,16 +13,21 @@ public class Mage extends RPGCharacter {
     }
 
     public Mage(String name, CharacterRole primary) {
-        super(name, CharacterType.RANGED, primary, List.of(2,1,0));
+        super(name, CharacterType.RANGED, primary, List.of(0,1,2));
         this.assignDefaultActions();
     }
 
     public Mage(String name, CharacterRole primary, CharacterRole secondary) {
-        super(name, CharacterType.RANGED, primary, secondary, List.of(2, 1, 0));
+        super(name, CharacterType.RANGED, primary, secondary, List.of(0, 1, 2));
+    }
+
+    public Mage(String name, CharacterRole primary, List<Integer> preferredCols)
+    {
+        super(name, CharacterType.RANGED, primary, preferredCols);
     }
 
     @Override
-    public void assignDefaultActions() {
-        this.addAction(new SpellCast());
+    protected void assignDefaultActions() {
+        this.addAction(new Fireball());
     }
 }
