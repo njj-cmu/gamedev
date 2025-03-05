@@ -28,33 +28,28 @@ public class TargetingSystem {
         List<Position> positions = new ArrayList<>();
 
         final int frontmost = TargetingSystem.getFrontMostColumn(targetParty, reversed);
-        final int limit;
-        if(reversed) {
-            limit = character.hasType(CharacterType.RANGED) ? frontmost - 1 : frontmost;
-        }
-        else {
-            limit = character.hasType(CharacterType.RANGED) ? frontmost + 1 : frontmost;
-        }
+        /*
+            Limit refers to the limit column of a character.
+         */
+        int limit = character.hasType(CharacterType.RANGED) ? frontmost + (reversed ? -1 : 1) : frontmost;
+
+        // Ceiling check since frontmost may be the backline and we cannot step back one column.
+        limit = Math.max(0, Math.min(2, limit));
+
+        /*
+            Determines party column iteration. If reversed, since the frontmost column will be 2 (instead of 0), it must
+            go back one step back to 1, thus step = -1 if reversed.
+         */
+        int step = reversed ? -1 : 1;
         /*
             To return the valid positions, we have these:
                 MELEE characters can only target the front-most columns.
                 RANGED characters can target the front-most column and the next column behind it.
          */
-        if(reversed) {
-            for(int col = frontmost; col >= limit; col--) {
-                for(int row = 0; row < Party.MAX_ROWS; row++) {
-                    if(!targetParty.isEmpty(row, col)) {
-                        positions.add(new Position(row, col));
-                    }
-                }
-            }
-        }
-        else {
-            for(int col = frontmost; col <= limit; col++) {
-                for(int row = 0; row < Party.MAX_ROWS; row++) {
-                    if(!targetParty.isEmpty(row, col)) {
-                        positions.add(new Position(row, col));
-                    }
+        for(int col = frontmost; (reversed ? col >= limit : col <= limit); col += step) {
+            for(int row = 0; row < Party.MAX_ROWS; row++) {
+                if(!targetParty.isEmpty(row, col)) {
+                    positions.add(new Position(row, col));
                 }
             }
         }
@@ -71,7 +66,7 @@ public class TargetingSystem {
      * @param party Party object to be checked.
      * @param reversed Flag if the party given is an enemy party or not.
      *                 <br>
-     *                 True if party is enemy party.
+     *                 True if party is allied party.
      *                 <br>
      *                 False otherwise.
      * @return First index column where an RPGCharacter appears.

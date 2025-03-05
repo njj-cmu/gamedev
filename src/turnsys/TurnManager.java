@@ -18,8 +18,6 @@ import java.util.Scanner;
 
 public class TurnManager {
 
-    private final static Scanner input = new Scanner(System.in);
-
     /**
      * Stores the queue of TurnEntry objects, where each TurnEntry object handles a particular character and monitors
      * their current turn order index. Positioning of characters in the queues is based on their SPEED attribute,
@@ -137,9 +135,6 @@ public class TurnManager {
             // Targeting logic should be reversed if the target party is a.
             // Meaning enemy party is targeting player party.
             boolean reversed = targetParty == a;
-
-            // Position object that holds the inputted targeted cell
-            Position targetCell;
 
             // Check targeting type of the action
             // If self-targeting, no need.

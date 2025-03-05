@@ -33,7 +33,7 @@ public class Game {
         // Enemy party composition
         // TODO: Try to play around the characters
 
-        Party enemyParty = new Party(true);1
+        Party enemyParty = new Party(true);
 
         RPGCharacter enemy1 = new Warrior("Johnson", CharacterRole.TANK);
         RPGCharacter enemy2 = new Archer("Miya");
