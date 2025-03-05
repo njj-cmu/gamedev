@@ -17,4 +17,6 @@
 <dl>
     <dt><h5>February 26, 2025</h5> </dt>
     <dd>Updated with the Turn System. Please refer to <i>turnsys</i> package for more information.</dd>
+    <dt><h5>March 5, 2025</h5></dt>
+    <dd>Updated with Initial Battle System. No attributes yet, but targeting has been initialized.</dd>
 </dl>
