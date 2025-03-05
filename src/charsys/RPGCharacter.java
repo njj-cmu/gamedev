@@ -160,9 +160,12 @@ public abstract class RPGCharacter {
     }
 
     public void displayCharacterActions() {
+        System.out.printf("%s's ACTIONS \n\n", this.name.toUpperCase());
+
         int i = 1;
         for(Actionable action: this.actions) {
             System.out.printf("[%d] %s\n", i, action.getActionName());
+            i++;
         }
     }
 }

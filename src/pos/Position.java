@@ -5,7 +5,6 @@ import party.Party;
 
 public class Position {
     private int row, col;
-    private RPGCharacter character;
 
     public Position(int row, int col) {
         this.row = row;

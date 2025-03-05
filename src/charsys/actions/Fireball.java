@@ -13,8 +13,13 @@ public class Fireball implements Actionable {
     }
 
     @Override
-    public void performAction(RPGCharacter target) {
-        System.out.printf("throws a fireball at %s!\n", target.getName());
+    public TargetParty getTargetPartySelector() {
+        return TargetParty.OPPOSITE;
+    }
+
+    @Override
+    public void performAction(RPGCharacter source, RPGCharacter target) {
+        System.out.printf("%s throws a fireball at %s!\n\n", source.getName(), target.getName());
     }
 
     @Override

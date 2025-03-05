@@ -9,12 +9,17 @@ public class Weaken implements Actionable {
 
     @Override
     public TargetType getTargetType() {
-        return null;
+        return TargetType.SINGLE;
     }
 
     @Override
-    public void performAction(RPGCharacter target) {
-        System.out.printf("decreases %s's defense!\n", target.getName());
+    public TargetParty getTargetPartySelector() {
+        return TargetParty.OPPOSITE;
+    }
+
+    @Override
+    public void performAction(RPGCharacter source, RPGCharacter target) {
+        System.out.printf("%s decreases %s's defense!\n\n", source.getName(), target.getName());
     }
 
     @Override

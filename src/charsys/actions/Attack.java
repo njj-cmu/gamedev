@@ -14,8 +14,13 @@ public class Attack implements Actionable {
     }
 
     @Override
-    public void performAction(RPGCharacter target) {
-        System.out.printf("attacks %s", target.getName());
+    public TargetParty getTargetPartySelector() {
+        return TargetParty.OPPOSITE;
+    }
+
+    @Override
+    public void performAction(RPGCharacter source, RPGCharacter target) {
+        System.out.printf("%s attacks %s!\n\n", source.getName(), target.getName());
     }
 
     public String getActionName() {

@@ -33,7 +33,7 @@ public class Game {
         // Enemy party composition
         // TODO: Try to play around the characters
 
-        Party enemyParty = new Party();
+        Party enemyParty = new Party(true);1
 
         RPGCharacter enemy1 = new Warrior("Johnson", CharacterRole.TANK);
         RPGCharacter enemy2 = new Archer("Miya");
@@ -49,5 +49,10 @@ public class Game {
 
         System.out.println("Enemy PARTY");
         enemyParty.displayParty();
+
+        // Create a Turn Manager object
+        TurnManager turnManager = new TurnManager(playerParty, enemyParty);
+        // Run
+        turnManager.runTurnCycle();
     }
 }

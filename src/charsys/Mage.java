@@ -13,12 +13,12 @@ public class Mage extends RPGCharacter {
     }
 
     public Mage(String name, CharacterRole primary) {
-        super(name, CharacterType.RANGED, primary, List.of(2,1,0));
+        super(name, CharacterType.RANGED, primary, List.of(0,1,2));
         this.assignDefaultActions();
     }
 
     public Mage(String name, CharacterRole primary, CharacterRole secondary) {
-        super(name, CharacterType.RANGED, primary, secondary, List.of(2, 1, 0));
+        super(name, CharacterType.RANGED, primary, secondary, List.of(0, 1, 2));
     }
 
     @Override

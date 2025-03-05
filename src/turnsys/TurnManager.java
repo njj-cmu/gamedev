@@ -2,18 +2,23 @@ package turnsys;
 
 import charsys.RPGCharacter;
 import charsys.actions.Actionable;
+import charsys.actions.TargetParty;
+import charsys.actions.TargetType;
 import charsys.attrib.Attribute;
 import inputsys.PlayerInput;
 import party.Party;
+import pos.Position;
+import targetingsys.TargetingSystem;
 
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-
+import java.util.Scanner;
 
 
 public class TurnManager {
 
+    private final static Scanner input = new Scanner(System.in);
 
     /**
      * Stores the queue of TurnEntry objects, where each TurnEntry object handles a particular character and monitors
@@ -90,16 +95,6 @@ public class TurnManager {
         return !turnQueue.isEmpty();
     }
 
-
-    private TurnEntry findTurnEntry(RPGCharacter character) {
-        for(TurnEntry entry: this.turnQueue) {
-            if(entry.getCharacter() == character) {
-                return entry;
-            }
-        }
-        return null;
-    }
-
     /**
      * Debugging purposes. Shows the queue of RPGCharacters in the Turn System.
      */
@@ -110,12 +105,75 @@ public class TurnManager {
     }
 
     public void runTurnCycle() {
+        // Extra spaces
+        System.out.println();
+
         while(this.hasTurnLeft()) {
+            // Get character that wants to execute their turn.
             RPGCharacter character = this.getNextTurn();
 
             if(character == null) break; // Safety check
 
+            // Get character affiliation
+            // Party A should always refer to player party.
+            boolean inPartyA = this.a.contains(character);
+
+            // Initialize a target party object
+            Party targetParty;
+
+            // Display whose character's turn it is
+            System.out.printf("%s's Turn!\n\n", character.getName());
             Actionable chosenAction = selectAction(character);
+
+            // Finalize target party object after an action is selected.
+            if((inPartyA && chosenAction.getTargetPartySelector() == TargetParty.OPPOSITE) ||
+                    (!inPartyA && chosenAction.getTargetPartySelector() == TargetParty.SELF)) {
+                targetParty = b;
+            }
+            else {
+                targetParty = a;
+            }
+
+            // Targeting logic should be reversed if the target party is a.
+            // Meaning enemy party is targeting player party.
+            boolean reversed = targetParty == a;
+
+            // Position object that holds the inputted targeted cell
+            Position targetCell;
+
+            // Check targeting type of the action
+            // If self-targeting, no need.
+            switch(chosenAction.getTargetType()) {
+                case SELF:
+                    // Perform action upon self immediately
+                    chosenAction.performAction(character, character);
+                    break;
+                case AOE:
+                    // Can select either empty cell or a character
+                    break;
+                case SINGLE:
+                case MULTI:
+                    List<Position> validTargets = TargetingSystem.getValidTargets(character, targetParty, reversed);
+                    if(validTargets != null)
+                    {
+                        // Show possible targets
+                        System.out.println("\nTARGETS\n--------");
+                        chosenAction.performAction(character, PlayerInput.chooseValidTarget(validTargets, targetParty));
+                    }
+                    else {
+                        // Skip current character if no valid targets
+                        // TODO: Re-select action if this happens later
+                        System.out.println("\nNo valid targets! Ending character's turn.");
+                        continue;
+                    }
+
+                    break;
+                default:
+                    System.err.println("Invalid action target type.");
+            }
+
+            // End current turn after performing action
+            this.endTurn();
         }
     }
 

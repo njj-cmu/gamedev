@@ -9,12 +9,17 @@ public class Defend implements Actionable {
 
     @Override
     public TargetType getTargetType() {
-        return TargetType.SINGLE;
+        return TargetType.SELF;
     }
 
     @Override
-    public void performAction(RPGCharacter target) {
-        System.out.printf("casted Defend on %s, increasing their defense!\n", target.getName());
+    public TargetParty getTargetPartySelector() {
+        return TargetParty.SELF;
+    }
+
+    @Override
+    public void performAction(RPGCharacter source, RPGCharacter target) {
+        System.out.printf("%s chooses to defend against the next attack, increasing their defense!\n\n", source.getName());
     }
 
     @Override

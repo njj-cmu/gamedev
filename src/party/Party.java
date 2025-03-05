@@ -136,6 +136,24 @@ public class Party {
     }
 
     /**
+     * Checks whether this Party object contains the specified character object.
+     * <br>
+     * Mainly used in targeting system to determine which party should the target pointer point into.
+     * @param ch Character to check.
+     * @return True if that character object is in this party. False otherwise.
+     */
+    public boolean contains(RPGCharacter ch) {
+        for(RPGCharacter[] row: partyGrid) {
+            for(RPGCharacter character: row) {
+                if(character == ch) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Gets the Position of the selected index from the party formation.
      * @param index Index.
      * @param reversed Flag if the retrieval of index is reversed.

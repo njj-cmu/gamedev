@@ -8,13 +8,18 @@ import charsys.RPGCharacter;
 public class Inspire implements Actionable {
     @Override
     public TargetType getTargetType() {
-        return TargetType.SINGLE;
+        return TargetType.SELF;
     }
 
     @Override
-    public void performAction(RPGCharacter target)
+    public TargetParty getTargetPartySelector() {
+        return TargetParty.SELF;
+    }
+
+    @Override
+    public void performAction(RPGCharacter source, RPGCharacter target)
     {
-        System.out.printf("buffed %s!\n", target.getName());
+        System.out.printf("%s buffed %s!\n\n", source.getName(), target.getName());
     }
 
     @Override
